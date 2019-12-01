@@ -1,0 +1,247 @@
+#!/usr/bin/env python3
+
+##
+# Convert HUD HMIS XSD schema file text from XML to SQL.
+#
+# This is a one-off development script. Not for production use.
+##
+
+import re
+import sys
+import importlib
+import xml.etree.ElementTree as ElementTree
+from functools import reduce
+
+# snake_case converts capitalization and underscores.
+#
+# Example:
+#
+#     snake_case("fooGooHoo") => "foo_goo_hoo"
+#
+def snake_case(str):
+    return reduce(lambda x, y: x + ('_' if x[-1].islower() and y.isupper() else '') + y, str).lower()
+
+# Load the HMIS XSD file to an XML ElementTree root.
+#
+# This function does some simple text correction,
+# such as fixing text apostrophes to be consistent.
+#
+def load_hud_hmis_xsd_file(file_name):
+    with open(file_name) as f: text = f.read()
+    text = re.sub(r'n\'t', 'n’t', text)  # Smart quote
+    return ElementTree.fromstring(text)
+
+# Schema representation for converting from XML to SQL.
+#
+# Example:
+#
+#     schema = Schema("myDemoName")
+#     schema.sql_name => "my_demo_name"
+#
+class Schema:
+
+    def __init__(self, xml_name):
+        self.xml_name = xml_name
+        self.sql_name = snake_case(xml_name)
+        self.tables = []
+
+    def sql(self):
+        return self.sql_tables()
+
+    def sql_tables(self):
+        return '\n\n'.join(map(lambda x: x.sql(), self.tables))
+
+# Table representation for converting from XML to SQL.
+#
+# Example:
+#
+#     table = Table("myDemoName")
+#     table.sql_name => "my_demo_name"
+#
+class Table:
+
+    def __init__(self, xml_name):
+        self.xml_name = xml_name
+        self.sql_name = snake_case(xml_name)
+        self.columns = []
+        self.rows = []
+
+    def sql(self):
+        s = self.sql_create()
+        if len(self.rows) > 0:
+            s = s + '\n\n' + self.sql_insert()
+        return s
+
+    def sql_create(self):
+        return 'CREATE TABLE ' + self.sql_name + ' (\n' + self.sql_columns() + '\n);'
+
+    def sql_insert(self):
+        return 'INSERT INTO ' + self.sql_name + ' values\n' + self.sql_rows() + ';'
+
+    def sql_columns(self):
+        return ',\n'.join(map(lambda x: '    ' + x.sql(), self.columns))
+
+    def sql_rows(self):
+        return ',\n'.join(map(lambda x: '    ' + x.sql(), self.rows))
+
+# Column representation for converting from XML to SQL.
+#
+# Example:
+#
+#     column = Column("myDemoName", "myDemoType")
+#     column.sql_name => "my_demo_name"
+#     column.sql_datatype => "my_demo_type"
+#
+# There's logic to handle the special case when the input
+# XML XSD column is an association that we want to convert
+# to use a typical SQL name and our preferred UUID datatype:
+#
+#     column = Column("Foo", "hmis:foo")
+#     column.sql_name => "foo_id"
+#     column.sql_datatype => "uuid"
+#
+class Column:
+
+    def __init__(self, xml_name, xml_datatype):
+        self.xml_name = xml_name
+        self.xml_datatype = xml_datatype
+        self.sql_name = self.xml_name_to_sql_name(xml_name)
+        self.sql_datatype = self.xml_datatype_to_sql_datatype(xml_datatype)
+
+    def xml_name_to_sql_name(self, xml_name):
+        if self.is_hmis_association():
+            return snake_case(xml_name) + '_id'
+        else:
+            return snake_case(xml_name)
+
+    def xml_datatype_to_sql_datatype(self, xml_datatype):
+        if self.is_hmis_association():
+            return 'id'
+        lookup = {
+            'xs:date': 'date',
+            'xs:dateTime': 'datetime',
+            'xs:string': 'text',
+            'hmis:money': 'money',
+            'hmis:string32': 'id',
+        }
+        if xml_datatype in lookup:
+            return lookup.get(xml_datatype)
+        if xml_datatype.startswith("xs:"):
+            if xml_datatype == 'xs:nonNegativeInteger':
+                return f"integer CHECK ({self.sql_name} >= 0)"
+            x = re.sub(r'^xs:', '', xml_datatype) # lstrip
+            return snake_case(x)                        
+        if xml_datatype.startswith("hmis:"):
+            x = re.sub(r'^hmis:', '', xml_datatype) # lstrip
+            if x in code_names:
+                return 'id references ' + snake_case(x) + '(id)'
+            x = re.sub(r'^string(\d+)', r'varchar(\1)', x)
+            return snake_case(x)
+        return snake_case(xml_datatype)
+
+    def is_hmis_association(self):
+        return snake_case(self.xml_datatype) == 'hmis:' + snake_case(self.xml_name)
+
+    def sql(self):
+        return self.sql_name + ' ' + self.sql_datatype
+
+# Row representation for converting from XML to SQL.
+#
+# Example:
+#
+#     row = Row()
+#     field = Field("Yes")
+#     row.fields.append(field)
+#
+class Row:
+
+    def __init__(self):
+        self.fields = []
+
+    def sql(self):
+        return self.sql_fields()
+
+    def sql_fields(self):
+        return '(' + ', '.join(map(lambda x: x.sql(), self.fields)) + ')'
+
+# Field representation for converting from XML to SQL.
+#
+# Example:
+#
+#     field = Field("Yes")
+#     field.sql() => "'Yes'"
+#
+class Field:
+
+    def __init__(self, value):
+        self.sql_value = '\'' + value + '\''
+
+    def sql(self):
+        return self.sql_value
+
+# Convenience because this string shows up so many places.
+XS = "{http://www.w3.org/2001/XMLSchema}"
+
+# Global
+code_names = []
+
+def parse_simple_type_to_table_of_codes(e):
+    name = e.attrib.get('name','?')
+    table = Table(name)
+    for restriction in e.findall(XS + 'restriction'):
+        for enumeration in restriction.findall(XS + 'enumeration'):
+            value = enumeration.attrib.get('value')
+            if value is not None:
+                row = Row()
+                field = Field(value)
+                row.fields.append(field)
+                for annotation in enumeration.findall(XS + 'annotation'):
+                    for documentation in annotation.findall(XS + 'documentation'):
+                        for text in documentation.itertext():
+                            field = Field(text)
+                            row.fields.append(field)
+                            table.rows.append(row)
+    if len(table.rows) > 0:
+        table.columns.append(Column('id', 'text PRIMARY KEY'))
+        table.columns.append(Column('text', 'text'))
+        code_names.append(name)
+        return table
+    else:
+        return None
+    
+def parse_complex_type_to_table(e):
+    name = e.attrib.get('name','?')
+    table = Table(name)
+    for sequence in e.findall(XS + 'sequence'):
+        for element in sequence.findall(XS + 'element'):
+            name = element.attrib.get('name','?')
+            datatype = element.attrib.get('type','?')
+            column = Column(name, datatype)
+            table.columns.append(column)
+    if len(table.columns) > 0:
+        return table
+    else:
+        return None
+
+def main():
+    # Read the XML XSD file text into an XML element tree root.
+    file_name = sys.argv[1]
+    root = load_hud_hmis_xsd_file(file_name)
+
+    # Create a schema object that will hold all the tables.
+    schema = Schema("public")
+
+    for e in root.findall(XS + 'simpleType'):
+        table = parse_simple_type_to_table_of_codes(e)
+        if table is not None:
+            schema.tables.append(table)
+
+    for e in root.findall(XS + 'complexType'):
+        table = parse_complex_type_to_table(e)
+        if table is not None:
+            schema.tables.append(table)
+
+    print(schema.sql())
+
+if __name__ == '__main__':
+    main()
