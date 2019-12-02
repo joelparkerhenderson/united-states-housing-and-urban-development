@@ -77,6 +77,7 @@ DROP TABLE IF EXISTS "record_type" CASCADE;
 DROP TABLE IF EXISTS "sexual_orientation" CASCADE;
 DROP TABLE IF EXISTS "source_type" CASCADE;
 DROP TABLE IF EXISTS "ssn_data_quality" CASCADE;
+DROP TABLE IF EXISTS "state" CASCADE;
 DROP TABLE IF EXISTS "subsidy_information" CASCADE;
 DROP TABLE IF EXISTS "time_to_housing_loss" CASCADE;
 DROP TABLE IF EXISTS "times_homeless_past_three_years" CASCADE;
@@ -961,6 +962,75 @@ INSERT INTO "ssn_data_quality" values
     ('8', 'Client doesn’t know'),
     ('9', 'Client refused'),
     ('99', 'Data not collected');
+
+CREATE TABLE "state" (
+    id text PRIMARY KEY,
+    text text
+);
+
+INSERT INTO "state" values
+    ('AK', 'AK'),
+    ('AL', 'AL'),
+    ('AR', 'AR'),
+    ('AZ', 'AZ'),
+    ('CA', 'CA'),
+    ('CO', 'CO'),
+    ('CT', 'CT'),
+    ('DE', 'DE'),
+    ('FL', 'FL'),
+    ('GA', 'GA'),
+    ('HI', 'HI'),
+    ('IA', 'IA'),
+    ('ID', 'ID'),
+    ('IL', 'IL'),
+    ('IN', 'IN'),
+    ('KS', 'KS'),
+    ('KY', 'KY'),
+    ('LA', 'LA'),
+    ('MA', 'MA'),
+    ('MD', 'MD'),
+    ('ME', 'ME'),
+    ('MI', 'MI'),
+    ('MN', 'MN'),
+    ('MO', 'MO'),
+    ('MS', 'MS'),
+    ('MT', 'MT'),
+    ('NC', 'NC'),
+    ('ND', 'ND'),
+    ('NE', 'NE'),
+    ('NH', 'NH'),
+    ('NJ', 'NJ'),
+    ('NM', 'NM'),
+    ('NV', 'NV'),
+    ('NY', 'NY'),
+    ('OH', 'OH'),
+    ('OK', 'OK'),
+    ('OR', 'OR'),
+    ('PA', 'PA'),
+    ('RI', 'RI'),
+    ('SC', 'SC'),
+    ('SD', 'SD'),
+    ('TN', 'TN'),
+    ('TX', 'TX'),
+    ('UT', 'UT'),
+    ('VA', 'VA'),
+    ('VT', 'VT'),
+    ('WA', 'WA'),
+    ('WI', 'WI'),
+    ('WV', 'WV'),
+    ('WY', 'WY'),
+    ('DC', 'DC'),
+    ('AS', 'AS'),
+    ('FM', 'FM'),
+    ('GU', 'GU'),
+    ('MH', 'MH'),
+    ('MP', 'MP'),
+    ('PR', 'PR'),
+    ('PW', 'PW'),
+    ('VI', 'VI'),
+    ('AA', 'AA'),
+    ('AE', 'AE'),
+    ('AP', 'AP');
 
 CREATE TABLE "subsidy_information" (
     id text PRIMARY KEY,

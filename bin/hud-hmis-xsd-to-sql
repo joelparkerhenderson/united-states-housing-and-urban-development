@@ -243,12 +243,21 @@ def parse_simple_type_to_table_of_codes(e):
                 row = Row()
                 field = Field(value)
                 row.fields.append(field)
-                for annotation in enumeration.findall(XS + 'annotation'):
-                    for documentation in annotation.findall(XS + 'documentation'):
-                        for text in documentation.itertext():
-                            field = Field(text)
-                            row.fields.append(field)
-                            table.rows.append(row)
+                text = value # default
+                annotation = enumeration.find(XS + 'annotation')
+                if annotation is not None:
+                    documentation = annotation.find(XS + 'documentation')
+                    if documentation is not None:
+                        text = documentation.text
+                field = Field(text)
+                row.fields.append(field)
+                table.rows.append(row)
+                # for annotation in enumeration.findall(XS + 'annotation'):
+                #     for documentation in annotation.findall(XS + 'documentation'):
+                #         for text in documentation.itertext():
+                #             field = Field(text)
+                #             row.fields.append(field)
+                #             table.rows.append(row)
     if len(table.rows) > 0:
         code_names.append(name)
         table.columns.append(Column('id', 'text'))
