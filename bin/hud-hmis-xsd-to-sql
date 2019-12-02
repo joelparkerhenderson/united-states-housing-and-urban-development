@@ -117,7 +117,8 @@ class Table:
         return f"INSERT INTO \"{self.sql_name}\" values\n{self.sql_rows()};"
 
     def sql_columns(self):
-        return ',\n'.join(map(lambda x: '    ' + x.sql(), self.columns))
+        last = self.columns[-1]
+        return '\n'.join(map(lambda x: '    ' + x.sql() + (',' if x != last else '') + ' ' + x.sql_comment(), self.columns))
 
     def sql_rows(self):
         return ',\n'.join(map(lambda x: '    ' + x.sql(), self.rows))
@@ -146,6 +147,7 @@ class Column:
         self.sql_name = self.xml_name_to_sql_name(xml_name)
         self.sql_datatype = self.xml_datatype_to_sql_datatype(xml_datatype)
         self.primary_key = False
+        self.comment = None
 
     def xml_name_to_sql_name(self, xml_name):
         lookup = {
@@ -190,6 +192,12 @@ class Column:
     def sql_primary_key_contraint(self):
         if self.primary_key:
             return " PRIMARY KEY"
+        else:
+            return ""
+
+    def sql_comment(self):
+        if self.comment is not None:
+            return "-- " + self.comment
         else:
             return ""
 
@@ -280,6 +288,16 @@ def parse_complex_type_to_table(e):
             else:
                 datatype = element.attrib.get('type','?')
             column = Column(name, datatype)
+            # Get text for comment, if any
+            annotation = element.find(XS + 'annotation')
+            if annotation is not None:
+                documentation = annotation.find(XS + 'documentation')
+                if documentation is not None:
+                    text = documentation.text
+                    if text is not None:
+                        text = re.sub(r' +$', '', text)
+                        text = re.sub(r',$', '.', text)
+                        column.comment = text
             table.columns.append(column)
     if len(table.columns) > 0:
         table.columns[0].primary_key = True
