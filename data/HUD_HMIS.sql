@@ -1710,18 +1710,6 @@ CREATE TABLE "service_fareferral" (
     enrollment_id varchar(32), -- Key reference to the Enrollment
     date_provided xs_date, 
     record_type_id integer, -- 
-						Contact records collected under 2014 HMIS Data Standards v5.1 (RecordType 12)
-						4.12 Contact records collected under 2017 HMIS Data Standards (RecordType 13)
-						4.14 Bed Night (RecordType 200)
-						P1 Services Provided – PATH (RecordType 141)
-						P2 Referrals Provided – PATH (RecordType 161)
-						R14 RHY Service Connections (RecordType 142)
-						W1 Services Provided – HOPWA (RecordType 143)
-						W2 Financial Assistance – HOPWA (RecordType 151)
-						V2 Services Provided – SSVF (RecordType 144)
-						V3 Financial Assistance – SSVF (RecordType 152)
-						V8.1 HUD-VASH Voucher Tracking (RecordType 210)
-					
     type_provided integer, -- See 2017 HMIS Data Dictionary v1.3.
     other_type_provided varchar(50), -- See 2017 HMIS Data Dictionary v1.3, Section 4.12 and 4.14-4.16.2D (if it exists) .
     sub_type_provided integer, -- See 2017 HMIS Data Dictionary v1.3, Section 4.12 and 4.14-4.16.3A, 4B, 5C (if it exists).

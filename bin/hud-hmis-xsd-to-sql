@@ -295,6 +295,7 @@ def parse_complex_type_to_table(e):
                 if documentation is not None:
                     text = documentation.text
                     if text is not None:
+                        text = text.partition('\n')[0]
                         text = re.sub(r' +$', '', text)
                         text = re.sub(r',$', '.', text)
                         column.comment = text
