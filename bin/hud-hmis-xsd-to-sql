@@ -43,13 +43,48 @@ class Schema:
     def __init__(self, xml_name):
         self.xml_name = xml_name
         self.sql_name = snake_case(xml_name)
+        self.domains = []
         self.tables = []
 
     def sql(self):
-        return self.sql_tables()
+        return \
+            self.sql_drop_domains() + '\n\n' + \
+            self.sql_drop_tables() + '\n\n' + \
+            self.sql_create_domains() + '\n\n' + \
+            self.sql_create_tables()
 
-    def sql_tables(self):
+    def sql_create_domains(self):
+        return '\n'.join(map(lambda x: x.sql_create() , self.domains))
+
+    def sql_drop_domains(self):
+        return '\n'.join(map(lambda x: x.sql_drop(), self.domains))
+
+    def sql_create_tables(self):
         return '\n\n'.join(map(lambda x: x.sql(), self.tables))
+
+    def sql_drop_tables(self):
+        return '\n'.join(map(lambda x: x.sql_drop(), self.tables))
+
+# Domain representation for converting from XML to SQL.
+#
+# Example:
+#
+#     domain = Domain("myDemoName", "myDemoDatatype")
+#     domain.sql_name => "my_demo_name"
+#
+class Domain:
+
+    def __init__(self, xml_name, sql_datatype):
+        self.xml_name = xml_name
+        self.sql_datatype = sql_datatype
+        self.sql_name = snake_case(re.sub(r':', '_', xml_name))
+
+    def sql_create(self):
+        return f"CREATE DOMAIN \"{self.sql_name}\" {self.sql_datatype};"
+
+    def sql_drop(self):
+        return f"DROP DOMAIN IF EXISTS \"{self.sql_name}\" CASCADE;"
+        
 
 # Table representation for converting from XML to SQL.
 #
@@ -73,10 +108,13 @@ class Table:
         return s
 
     def sql_create(self):
-        return 'CREATE TABLE ' + self.sql_name + ' (\n' + self.sql_columns() + '\n);'
+        return f"CREATE TABLE \"{self.sql_name}\" (\n{self.sql_columns()}\n);"
+
+    def sql_drop(self):
+        return f"DROP TABLE IF EXISTS \"{self.sql_name}\" CASCADE;"
 
     def sql_insert(self):
-        return 'INSERT INTO ' + self.sql_name + ' values\n' + self.sql_rows() + ';'
+        return f"INSERT INTO \"{self.sql_name}\" values\n{self.sql_rows()};"
 
     def sql_columns(self):
         return ',\n'.join(map(lambda x: '    ' + x.sql(), self.columns))
@@ -107,8 +145,14 @@ class Column:
         self.xml_datatype = xml_datatype
         self.sql_name = self.xml_name_to_sql_name(xml_name)
         self.sql_datatype = self.xml_datatype_to_sql_datatype(xml_datatype)
+        self.primary_key = False
 
     def xml_name_to_sql_name(self, xml_name):
+        lookup = {
+            'CoCCode': 'coc_code',
+        }
+        if xml_name in lookup:
+            return lookup.get(xml_name)
         if self.is_hmis_association():
             return snake_case(xml_name) + '_id'
         else:
@@ -116,34 +160,38 @@ class Column:
 
     def xml_datatype_to_sql_datatype(self, xml_datatype):
         if self.is_hmis_association():
-            return 'id'
-        lookup = {
-            'xs:date': 'date',
-            'xs:dateTime': 'datetime',
-            'xs:string': 'text',
-            'hmis:money': 'money',
-            'hmis:string32': 'id',
-        }
-        if xml_datatype in lookup:
-            return lookup.get(xml_datatype)
-        if xml_datatype.startswith("xs:"):
-            if xml_datatype == 'xs:nonNegativeInteger':
-                return f"integer CHECK ({self.sql_name} >= 0)"
-            x = re.sub(r'^xs:', '', xml_datatype) # lstrip
-            return snake_case(x)                        
+            return 'integer'
+        if xml_datatype == 'xs:positiveInteger':
+            return f"integer CHECK ({self.sql_name} > 0)"
+        if xml_datatype == 'xs:nonNegativeInteger':
+            return f"integer CHECK ({self.sql_name} >= 0)"
+        if xml_datatype == 'hmis:state': 
+            return 'hmis_state references state(id)'
+        if xml_datatype == 'hmis:dateRangeCapped': 
+            return 'integer references date_range_capped(id)'
+        # Compare with code names
+        if xml_datatype in code_names:
+            return 'text references ' + snake_case(xml_datatype) + '(id)'
         if xml_datatype.startswith("hmis:"):
             x = re.sub(r'^hmis:', '', xml_datatype) # lstrip
             if x in code_names:
-                return 'id references ' + snake_case(x) + '(id)'
-            x = re.sub(r'^string(\d+)', r'varchar(\1)', x)
-            return snake_case(x)
-        return snake_case(xml_datatype)
+                return 'text references ' + snake_case(x) + '(id)'
+        # Is it a string type?
+        x = re.sub(r'hmis:string(\d+)', r'varchar(\1)', xml_datatype)
+        # Default is to do snake and handle the output via domain
+        return snake_case(re.sub(r':', '_', x))
 
     def is_hmis_association(self):
         return snake_case(self.xml_datatype) == 'hmis:' + snake_case(self.xml_name)
 
     def sql(self):
-        return self.sql_name + ' ' + self.sql_datatype
+        return self.sql_name + ' ' + self.sql_datatype + self.sql_primary_key_contraint()
+
+    def sql_primary_key_contraint(self):
+        if self.primary_key:
+            return " PRIMARY KEY"
+        else:
+            return ""
 
 # Row representation for converting from XML to SQL.
 #
@@ -202,9 +250,10 @@ def parse_simple_type_to_table_of_codes(e):
                             row.fields.append(field)
                             table.rows.append(row)
     if len(table.rows) > 0:
-        table.columns.append(Column('id', 'text PRIMARY KEY'))
-        table.columns.append(Column('text', 'text'))
         code_names.append(name)
+        table.columns.append(Column('id', 'text'))
+        table.columns.append(Column('text', 'text'))  
+        table.columns[0].primary_key = True
         return table
     else:
         return None
@@ -212,13 +261,19 @@ def parse_simple_type_to_table_of_codes(e):
 def parse_complex_type_to_table(e):
     name = e.attrib.get('name','?')
     table = Table(name)
+    if name == "dateRangeCapped":
+        table.columns.append(Column('id', 'integer'))
     for sequence in e.findall(XS + 'sequence'):
         for element in sequence.findall(XS + 'element'):
             name = element.attrib.get('name','?')
-            datatype = element.attrib.get('type','?')
+            if name == 'TypeProvided' or name == 'SubTypeProvided':
+                datatype = 'integer' # This is a lookup number - see doc
+            else:
+                datatype = element.attrib.get('type','?')
             column = Column(name, datatype)
             table.columns.append(column)
     if len(table.columns) > 0:
+        table.columns[0].primary_key = True
         return table
     else:
         return None
@@ -230,6 +285,30 @@ def main():
 
     # Create a schema object that will hold all the tables.
     schema = Schema("public")
+    schema.domains.append(Domain('xs:date', 'date'))
+    schema.domains.append(Domain('xs:dateTime', 'timestamp'))
+    schema.domains.append(Domain('xs:gYear', 'integer')) # TODO scope to appropriate current years
+    schema.domains.append(Domain('xs:integer', 'integer'))
+    schema.domains.append(Domain('xs:unsignedInt', 'integer'))
+    schema.domains.append(Domain('xs:string', 'text'))
+    schema.domains.append(Domain('hmis:coc_code', 'text')) # TODO what is this?
+    schema.domains.append(Domain('hmis:email', 'varchar(320)'))
+    schema.domains.append(Domain('hmis:money', 'money'))
+    schema.domains.append(Domain('hmis:nameHashingOption', 'varchar'))
+    schema.domains.append(Domain('hmis:nameHashingOptionPlain', 'varchar(50)'))
+    schema.domains.append(Domain('hmis:nameHashingOptionSHA1RHY', 'char(40)')) # TODO /^[a-zA-Z0-9]$)/
+    schema.domains.append(Domain('hmis:ssnHashingOption', 'varchar'))
+    schema.domains.append(Domain('hmis:ssnHashingOptionPlain', 'varchar(50)')) # TODO /^[0-9xX]{9}$/
+    schema.domains.append(Domain('hmis:ssnHashingOptionSHA1RHY', 'char(44)')) # TODO /^[a-zA-Z0-9]$)/
+    schema.domains.append(Domain('hmis:state', 'char(2)'))
+    schema.domains.append(Domain('hmis:string32', 'varchar(32)'))
+    schema.domains.append(Domain('hmis:zipCode', 'varchar(10)'))
+    schema.domains.append(Domain('hmis:disabilityResponseBase', 'integer')) # TODO this is a lookup id
+    schema.domains.append(Domain('hmis:tCellCount', 'integer')) # TODO 0..1500
+    schema.domains.append(Domain('hmis:hpScreeningScore', 'char(2)')) # TODO /^[0-9]{2}$/
+    schema.domains.append(Domain('hmis:extension', 'varchar(5)')) # telephone extension # TODO [0-9]{1,5}
+    schema.domains.append(Domain('hmis:phoneNumber', 'char(10)')) # telephone number in U.S. # TODO pattern "[2-9][0-9]{2}[2-9][0-9]{2}[0-9]{4}"
+    schema.domains.append(Domain('hmis:dateRangeCapped', 'integer')) # TODO references date_range_capped(id)
 
     for e in root.findall(XS + 'simpleType'):
         table = parse_simple_type_to_table_of_codes(e)

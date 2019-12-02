@@ -1,44 +1,198 @@
-CREATE TABLE address_data_quality (
-    id text primary key,
+DROP DOMAIN IF EXISTS "xs_date" CASCADE;
+DROP DOMAIN IF EXISTS "xs_date_time" CASCADE;
+DROP DOMAIN IF EXISTS "xs_g_year" CASCADE;
+DROP DOMAIN IF EXISTS "xs_integer" CASCADE;
+DROP DOMAIN IF EXISTS "xs_unsigned_int" CASCADE;
+DROP DOMAIN IF EXISTS "xs_string" CASCADE;
+DROP DOMAIN IF EXISTS "hmis_coc_code" CASCADE;
+DROP DOMAIN IF EXISTS "hmis_email" CASCADE;
+DROP DOMAIN IF EXISTS "hmis_money" CASCADE;
+DROP DOMAIN IF EXISTS "hmis_name_hashing_option" CASCADE;
+DROP DOMAIN IF EXISTS "hmis_name_hashing_option_plain" CASCADE;
+DROP DOMAIN IF EXISTS "hmis_name_hashing_option_sha1rhy" CASCADE;
+DROP DOMAIN IF EXISTS "hmis_ssn_hashing_option" CASCADE;
+DROP DOMAIN IF EXISTS "hmis_ssn_hashing_option_plain" CASCADE;
+DROP DOMAIN IF EXISTS "hmis_ssn_hashing_option_sha1rhy" CASCADE;
+DROP DOMAIN IF EXISTS "hmis_state" CASCADE;
+DROP DOMAIN IF EXISTS "hmis_string32" CASCADE;
+DROP DOMAIN IF EXISTS "hmis_zip_code" CASCADE;
+DROP DOMAIN IF EXISTS "hmis_disability_response_base" CASCADE;
+DROP DOMAIN IF EXISTS "hmis_t_cell_count" CASCADE;
+DROP DOMAIN IF EXISTS "hmis_hp_screening_score" CASCADE;
+DROP DOMAIN IF EXISTS "hmis_extension" CASCADE;
+DROP DOMAIN IF EXISTS "hmis_phone_number" CASCADE;
+DROP DOMAIN IF EXISTS "hmis_date_range_capped" CASCADE;
+
+DROP TABLE IF EXISTS "address_data_quality" CASCADE;
+DROP TABLE IF EXISTS "annual_percent_ami" CASCADE;
+DROP TABLE IF EXISTS "asked_or_forced_to_exchange_for_sex" CASCADE;
+DROP TABLE IF EXISTS "assessment_disposition" CASCADE;
+DROP TABLE IF EXISTS "availability" CASCADE;
+DROP TABLE IF EXISTS "bed_type" CASCADE;
+DROP TABLE IF EXISTS "cm_exit_reason" CASCADE;
+DROP TABLE IF EXISTS "count_of_exchange_for_sex" CASCADE;
+DROP TABLE IF EXISTS "destination" CASCADE;
+DROP TABLE IF EXISTS "disability_type" CASCADE;
+DROP TABLE IF EXISTS "discharge_status" CASCADE;
+DROP TABLE IF EXISTS "dob_data_quality" CASCADE;
+DROP TABLE IF EXISTS "early_exit_reason" CASCADE;
+DROP TABLE IF EXISTS "employment_type" CASCADE;
+DROP TABLE IF EXISTS "ethnicity" CASCADE;
+DROP TABLE IF EXISTS "eviction_history" CASCADE;
+DROP TABLE IF EXISTS "export_period_type" CASCADE;
+DROP TABLE IF EXISTS "export_directive" CASCADE;
+DROP TABLE IF EXISTS "federal_partner_programs_and_components" CASCADE;
+DROP TABLE IF EXISTS "no_yes_doesnt_know_refused" CASCADE;
+DROP TABLE IF EXISTS "rhy_reason_no_services" CASCADE;
+DROP TABLE IF EXISTS "gender" CASCADE;
+DROP TABLE IF EXISTS "geography_type" CASCADE;
+DROP TABLE IF EXISTS "health_category" CASCADE;
+DROP TABLE IF EXISTS "health_status_type" CASCADE;
+DROP TABLE IF EXISTS "household_type" CASCADE;
+DROP TABLE IF EXISTS "housing_assessment_at_exit" CASCADE;
+DROP TABLE IF EXISTS "housing_type" CASCADE;
+DROP TABLE IF EXISTS "last_grade_completed_simple" CASCADE;
+DROP TABLE IF EXISTS "literal_homeless_history" CASCADE;
+DROP TABLE IF EXISTS "military_branch" CASCADE;
+DROP TABLE IF EXISTS "months_homeless_past_three_years" CASCADE;
+DROP TABLE IF EXISTS "name_data_quality" CASCADE;
+DROP TABLE IF EXISTS "reason_not_insured_or_assisted" CASCADE;
+DROP TABLE IF EXISTS "no_points_yes" CASCADE;
+DROP TABLE IF EXISTS "no_yes" CASCADE;
+DROP TABLE IF EXISTS "no_yes_refused" CASCADE;
+DROP TABLE IF EXISTS "no_yes_worker_doesnt_know" CASCADE;
+DROP TABLE IF EXISTS "not_employed_reason" CASCADE;
+DROP TABLE IF EXISTS "percent_amisimple" CASCADE;
+DROP TABLE IF EXISTS "project_completion_status" CASCADE;
+DROP TABLE IF EXISTS "project_type" CASCADE;
+DROP TABLE IF EXISTS "race" CASCADE;
+DROP TABLE IF EXISTS "reason_not_enrolled" CASCADE;
+DROP TABLE IF EXISTS "referral_outcome" CASCADE;
+DROP TABLE IF EXISTS "referral_source" CASCADE;
+DROP TABLE IF EXISTS "relationship_to_ho_h" CASCADE;
+DROP TABLE IF EXISTS "living_situation" CASCADE;
+DROP TABLE IF EXISTS "length_of_stay" CASCADE;
+DROP TABLE IF EXISTS "school_status" CASCADE;
+DROP TABLE IF EXISTS "record_type" CASCADE;
+DROP TABLE IF EXISTS "sexual_orientation" CASCADE;
+DROP TABLE IF EXISTS "source_type" CASCADE;
+DROP TABLE IF EXISTS "ssn_data_quality" CASCADE;
+DROP TABLE IF EXISTS "subsidy_information" CASCADE;
+DROP TABLE IF EXISTS "time_to_housing_loss" CASCADE;
+DROP TABLE IF EXISTS "times_homeless_past_three_years" CASCADE;
+DROP TABLE IF EXISTS "target_population" CASCADE;
+DROP TABLE IF EXISTS "t_cell_or_viral_load_source" CASCADE;
+DROP TABLE IF EXISTS "tracking_method" CASCADE;
+DROP TABLE IF EXISTS "vamc_station" CASCADE;
+DROP TABLE IF EXISTS "viral_load_available" CASCADE;
+DROP TABLE IF EXISTS "when_occurred" CASCADE;
+DROP TABLE IF EXISTS "issues_years" CASCADE;
+DROP TABLE IF EXISTS "affiliation" CASCADE;
+DROP TABLE IF EXISTS "client" CASCADE;
+DROP TABLE IF EXISTS "client_veteran_info" CASCADE;
+DROP TABLE IF EXISTS "coc" CASCADE;
+DROP TABLE IF EXISTS "connection_with_soar" CASCADE;
+DROP TABLE IF EXISTS "date_of_engagement" CASCADE;
+DROP TABLE IF EXISTS "date_range_capped" CASCADE;
+DROP TABLE IF EXISTS "disabilities" CASCADE;
+DROP TABLE IF EXISTS "domestic_violence" CASCADE;
+DROP TABLE IF EXISTS "education" CASCADE;
+DROP TABLE IF EXISTS "employment" CASCADE;
+DROP TABLE IF EXISTS "enrollment" CASCADE;
+DROP TABLE IF EXISTS "enrollment_co_c" CASCADE;
+DROP TABLE IF EXISTS "entry_rhsp" CASCADE;
+DROP TABLE IF EXISTS "entry_rhy" CASCADE;
+DROP TABLE IF EXISTS "entry_ssvf" CASCADE;
+DROP TABLE IF EXISTS "exit" CASCADE;
+DROP TABLE IF EXISTS "exit_housing_assessment" CASCADE;
+DROP TABLE IF EXISTS "exit_rhy" CASCADE;
+DROP TABLE IF EXISTS "export" CASCADE;
+DROP TABLE IF EXISTS "funder" CASCADE;
+DROP TABLE IF EXISTS "health_insurance" CASCADE;
+DROP TABLE IF EXISTS "health_status" CASCADE;
+DROP TABLE IF EXISTS "housing_assessment_disposition" CASCADE;
+DROP TABLE IF EXISTS "income_and_sources" CASCADE;
+DROP TABLE IF EXISTS "inventory" CASCADE;
+DROP TABLE IF EXISTS "medical_assistance" CASCADE;
+DROP TABLE IF EXISTS "non_cash_benefits" CASCADE;
+DROP TABLE IF EXISTS "organization" CASCADE;
+DROP TABLE IF EXISTS "path_status" CASCADE;
+DROP TABLE IF EXISTS "project" CASCADE;
+DROP TABLE IF EXISTS "move_in_date" CASCADE;
+DROP TABLE IF EXISTS "rhy_aftercare" CASCADE;
+DROP TABLE IF EXISTS "rhy_bcpstatus" CASCADE;
+DROP TABLE IF EXISTS "service_fareferral" CASCADE;
+DROP TABLE IF EXISTS "geography" CASCADE;
+DROP TABLE IF EXISTS "source" CASCADE;
+DROP TABLE IF EXISTS "sources" CASCADE;
+DROP TABLE IF EXISTS "vash_exit_reason" CASCADE;
+
+CREATE DOMAIN "xs_date" date;
+CREATE DOMAIN "xs_date_time" timestamp;
+CREATE DOMAIN "xs_g_year" integer;
+CREATE DOMAIN "xs_integer" integer;
+CREATE DOMAIN "xs_unsigned_int" integer;
+CREATE DOMAIN "xs_string" text;
+CREATE DOMAIN "hmis_coc_code" text;
+CREATE DOMAIN "hmis_email" varchar(320);
+CREATE DOMAIN "hmis_money" money;
+CREATE DOMAIN "hmis_name_hashing_option" varchar;
+CREATE DOMAIN "hmis_name_hashing_option_plain" varchar(50);
+CREATE DOMAIN "hmis_name_hashing_option_sha1rhy" char(40);
+CREATE DOMAIN "hmis_ssn_hashing_option" varchar;
+CREATE DOMAIN "hmis_ssn_hashing_option_plain" varchar(50);
+CREATE DOMAIN "hmis_ssn_hashing_option_sha1rhy" char(44);
+CREATE DOMAIN "hmis_state" char(2);
+CREATE DOMAIN "hmis_string32" varchar(32);
+CREATE DOMAIN "hmis_zip_code" varchar(10);
+CREATE DOMAIN "hmis_disability_response_base" integer;
+CREATE DOMAIN "hmis_t_cell_count" integer;
+CREATE DOMAIN "hmis_hp_screening_score" char(2);
+CREATE DOMAIN "hmis_extension" varchar(5);
+CREATE DOMAIN "hmis_phone_number" char(10);
+CREATE DOMAIN "hmis_date_range_capped" integer;
+
+CREATE TABLE "address_data_quality" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO address_data_quality values
+INSERT INTO "address_data_quality" values
     ('1', 'Full address reported'),
     ('2', 'Incomplete or estimated address reported'),
     ('8', 'Client doesn’t know'),
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE annual_percent_ami (
-    id text primary key,
+CREATE TABLE "annual_percent_ami" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO annual_percent_ami values
+INSERT INTO "annual_percent_ami" values
     ('0', '0-14% of AMI for household size'),
     ('1', '15-30% of AMI for household size'),
     ('2', 'More than 30% of AMI for household size (0 points)'),
     ('99', 'Data not collected');
 
-CREATE TABLE asked_or_forced_to_exchange_for_sex (
-    id text primary key,
+CREATE TABLE "asked_or_forced_to_exchange_for_sex" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO asked_or_forced_to_exchange_for_sex values
+INSERT INTO "asked_or_forced_to_exchange_for_sex" values
     ('0', 'No'),
     ('1', 'Yes'),
     ('8', 'Client doesn’t know'),
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE assessment_disposition (
-    id text primary key,
+CREATE TABLE "assessment_disposition" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO assessment_disposition values
+INSERT INTO "assessment_disposition" values
     ('1', 'Referred to emergency shelter/safe haven'),
     ('2', 'Referred to transitional housing'),
     ('3', 'Referred to rapid re-housing'),
@@ -55,32 +209,32 @@ INSERT INTO assessment_disposition values
     ('14', 'Other/specify'),
     ('99', 'Data not collected');
 
-CREATE TABLE availability (
-    id text primary key,
+CREATE TABLE "availability" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO availability values
+INSERT INTO "availability" values
     ('1', 'Year-round'),
     ('2', 'Seasonal'),
     ('3', 'Overflow');
 
-CREATE TABLE bed_type (
-    id text primary key,
+CREATE TABLE "bed_type" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO bed_type values
+INSERT INTO "bed_type" values
     ('1', 'Facility-based'),
     ('2', 'Voucher'),
     ('3', 'Other');
 
-CREATE TABLE cm_exit_reason (
-    id text primary key,
+CREATE TABLE "cm_exit_reason" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO cm_exit_reason values
+INSERT INTO "cm_exit_reason" values
     ('1', 'Accomplished goals and/or obtained services and no longer needs CM'),
     ('2', 'Transferred to another HUD-VASH program site'),
     ('3', 'Found/chose other housing'),
@@ -96,12 +250,12 @@ INSERT INTO cm_exit_reason values
     ('13', 'Other'),
     ('99', 'Data not collected');
 
-CREATE TABLE count_of_exchange_for_sex (
-    id text primary key,
+CREATE TABLE "count_of_exchange_for_sex" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO count_of_exchange_for_sex values
+INSERT INTO "count_of_exchange_for_sex" values
     ('1', '1-3'),
     ('2', '4-7'),
     ('3', '8-11'),
@@ -110,12 +264,12 @@ INSERT INTO count_of_exchange_for_sex values
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE destination (
-    id text primary key,
+CREATE TABLE "destination" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO destination values
+INSERT INTO "destination" values
     ('24', 'Deceased'),
     ('1', 'Emergency shelter, including hotel or motel paid for with emergency shelter voucher'),
     ('15', 'Foster care home or foster care group home'),
@@ -149,12 +303,12 @@ INSERT INTO destination values
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE disability_type (
-    id text primary key,
+CREATE TABLE "disability_type" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO disability_type values
+INSERT INTO "disability_type" values
     ('5', 'Physical Disability'),
     ('6', 'Developmental Disability'),
     ('7', 'Chronic Health Condition'),
@@ -163,12 +317,12 @@ INSERT INTO disability_type values
     ('10', 'Substance Abuse'),
     ('99', 'Data not collected');
 
-CREATE TABLE discharge_status (
-    id text primary key,
+CREATE TABLE "discharge_status" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO discharge_status values
+INSERT INTO "discharge_status" values
     ('1', 'Honorable'),
     ('2', 'General under honorable conditions'),
     ('4', 'Bad conduct'),
@@ -179,24 +333,24 @@ INSERT INTO discharge_status values
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE dob_data_quality (
-    id text primary key,
+CREATE TABLE "dob_data_quality" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO dob_data_quality values
+INSERT INTO "dob_data_quality" values
     ('1', 'Full DOB reported'),
     ('2', 'Approximate or partial DOB reported'),
     ('8', 'Client doesn’t know'),
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE early_exit_reason (
-    id text primary key,
+CREATE TABLE "early_exit_reason" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO early_exit_reason values
+INSERT INTO "early_exit_reason" values
     ('1', 'Left for other opportunities – Independent living *OR* Criminal activity/destruction of property/violence'),
     ('2', 'Left for other opportunities - Education *OR* Non-compliance with project rules'),
     ('3', 'Left for other opportunities - Military *OR* Non-payment of rent/occupancy charge'),
@@ -205,68 +359,68 @@ INSERT INTO early_exit_reason values
     ('6', 'Unknown/disappeared'),
     ('99', 'Data not collected');
 
-CREATE TABLE employment_type (
-    id text primary key,
+CREATE TABLE "employment_type" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO employment_type values
+INSERT INTO "employment_type" values
     ('1', 'Full-timed'),
     ('2', 'Part-time'),
     ('3', 'Seasonal / sporadic (including day labor)'),
     ('99', 'Data not collected');
 
-CREATE TABLE ethnicity (
-    id text primary key,
+CREATE TABLE "ethnicity" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO ethnicity values
+INSERT INTO "ethnicity" values
     ('0', 'Non-Hispanic/Non-Latino'),
     ('1', 'Hispanic/Latino'),
     ('8', 'Client doesn’t know'),
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE eviction_history (
-    id text primary key,
+CREATE TABLE "eviction_history" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO eviction_history values
+INSERT INTO "eviction_history" values
     ('0', '4 or more prior rental evictions'),
     ('1', '2-3 prior rental evictions'),
     ('2', '1 prior rental eviction'),
     ('3', 'No prior rental evictions (0 points)'),
     ('99', 'Data not collected');
 
-CREATE TABLE export_period_type (
-    id text primary key,
+CREATE TABLE "export_period_type" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO export_period_type values
+INSERT INTO "export_period_type" values
     ('updated', 'Exported data sets with an ExportPeriodType of ‘updated’ will include all records with a dateCreated, dateUpdated, or a dateDeleted that falls between the Export.StartDate and the Export.EndDate.'),
     ('effective', 'Exported data sets with an ExportPeriod type of ‘effective’ will include all enrollment data, along with associated client and project descriptor data, where the informationDate (or other effective date such as Project.EntryDate, Project.ExitDate, etc.) falls between the Export.StartDate and the Export.EndDate.'),
     ('reportingPeriod', '‘reportingPeriod’ exports include all records needed for reporting on clients and enrollments active in the export period.  This will include all records in Enrollments (regardless of informationDate, dateCreated, dateUpdated, etc.), client files, and project descriptor files associated with a EnrollmentID where: EnrollmentDate is on or before the Export.EndDate; Project.ExitDate is null OR Project.ExitDate is on or after the Export.StartDate; ProjectID is associated with a project selected by a user for export OR the user did not choose to filter the export by Project; A CoCCode associated with the EnrollmentID matches a CoCCode selected by a user for export OR the user did not choose to filter the export by CoCCode.'),
     ('other', 'The ‘other’ type of ExportPeriodType is used to identify exports in which records were selected based upon parameters mutually agreed upon by the sender and recipient of the XML data."');
 
-CREATE TABLE export_directive (
-    id text primary key,
+CREATE TABLE "export_directive" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO export_directive values
+INSERT INTO "export_directive" values
     ('deltaRefresh', 'The data contained in this file is meant to be synchronized with an existing data set.'),
     ('fullRefresh', 'The data contained in this file is meant to replace an existing data set for the export period.'),
     ('other', 'The data contained in this file were selected based upon parameters mutually agreed upon by the sender and recipient of the XML data.');
 
-CREATE TABLE federal_partner_programs_and_components (
-    id text primary key,
+CREATE TABLE "federal_partner_programs_and_components" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO federal_partner_programs_and_components values
+INSERT INTO "federal_partner_programs_and_components" values
     ('1', 'HUD:CoC – Homelessness Prevention (High Performing Comm. Only)'),
     ('2', 'HUD:CoC – Permanent Supportive Housing'),
     ('3', 'HUD:CoC – Rapid Re-Housing'),
@@ -308,36 +462,36 @@ INSERT INTO federal_partner_programs_and_components values
     ('42', 'VA:Grant Per Diem – Transition in Place'),
     ('43', 'HUD:CoC – Youth Homeless Demonstration Program (YHDP)');
 
-CREATE TABLE no_yes_doesnt_know_refused (
-    id text primary key,
+CREATE TABLE "no_yes_doesnt_know_refused" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO no_yes_doesnt_know_refused values
+INSERT INTO "no_yes_doesnt_know_refused" values
     ('0', 'No'),
     ('1', 'Yes'),
     ('8', 'Client doesn’t know'),
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE rhy_reason_no_services (
-    id text primary key,
+CREATE TABLE "rhy_reason_no_services" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO rhy_reason_no_services values
+INSERT INTO "rhy_reason_no_services" values
     ('1', 'Out of age range'),
     ('2', 'Ward of the State – Immediate Reunification'),
     ('3', 'Ward of the Criminal Justice System – Immediate Reunification'),
     ('4', 'Other'),
     ('99', 'Data not collected');
 
-CREATE TABLE gender (
-    id text primary key,
+CREATE TABLE "gender" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO gender values
+INSERT INTO "gender" values
     ('0', 'Female'),
     ('1', 'Male'),
     ('2', 'Transgender male to female'),
@@ -347,33 +501,33 @@ INSERT INTO gender values
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE geography_type (
-    id text primary key,
+CREATE TABLE "geography_type" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO geography_type values
+INSERT INTO "geography_type" values
     ('1', 'Urban'),
     ('2', 'Suburban'),
     ('3', 'Rural'),
     ('99', 'Unknown / data not collected');
 
-CREATE TABLE health_category (
-    id text primary key,
+CREATE TABLE "health_category" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO health_category values
+INSERT INTO "health_category" values
     ('27', 'General Health Status'),
     ('28', 'Dental Health Status'),
     ('29', 'Mental Health Status');
 
-CREATE TABLE health_status_type (
-    id text primary key,
+CREATE TABLE "health_status_type" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO health_status_type values
+INSERT INTO "health_status_type" values
     ('1', 'Excellent'),
     ('2', 'Very good'),
     ('3', 'Good'),
@@ -383,22 +537,22 @@ INSERT INTO health_status_type values
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE household_type (
-    id text primary key,
+CREATE TABLE "household_type" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO household_type values
+INSERT INTO "household_type" values
     ('1', 'Households without children'),
     ('3', 'Households with at least one adult and one child'),
     ('4', 'Households with only children');
 
-CREATE TABLE housing_assessment_at_exit (
-    id text primary key,
+CREATE TABLE "housing_assessment_at_exit" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO housing_assessment_at_exit values
+INSERT INTO "housing_assessment_at_exit" values
     ('1', 'Able to maintain the housing they had at project entry'),
     ('2', 'Moved to new housing unit'),
     ('3', 'Moved in with family/friends on a temporary basis'),
@@ -411,22 +565,22 @@ INSERT INTO housing_assessment_at_exit values
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE housing_type (
-    id text primary key,
+CREATE TABLE "housing_type" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO housing_type values
+INSERT INTO "housing_type" values
     ('1', 'Site-based - single site'),
     ('2', 'Site-based - clustered/multiple sites'),
     ('3', 'Tenant-based - scattered site');
 
-CREATE TABLE last_grade_completed_simple (
-    id text primary key,
+CREATE TABLE "last_grade_completed_simple" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO last_grade_completed_simple values
+INSERT INTO "last_grade_completed_simple" values
     ('1', 'Less than Grade 5'),
     ('2', 'Grades 5-6'),
     ('3', 'Grades 7-8'),
@@ -443,24 +597,24 @@ INSERT INTO last_grade_completed_simple values
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE literal_homeless_history (
-    id text primary key,
+CREATE TABLE "literal_homeless_history" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO literal_homeless_history values
+INSERT INTO "literal_homeless_history" values
     ('0', '4 or more times or total of at least 12 months in past three years'),
     ('1', '2-3 times in past three years'),
     ('2', '1 time in past three years'),
     ('3', 'None (0 points)'),
     ('99', 'Data not collected');
 
-CREATE TABLE military_branch (
-    id text primary key,
+CREATE TABLE "military_branch" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO military_branch values
+INSERT INTO "military_branch" values
     ('1', 'Army'),
     ('2', 'Air Force'),
     ('3', 'Navy'),
@@ -471,12 +625,12 @@ INSERT INTO military_branch values
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE months_homeless_past_three_years (
-    id text primary key,
+CREATE TABLE "months_homeless_past_three_years" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO months_homeless_past_three_years values
+INSERT INTO "months_homeless_past_three_years" values
     ('101', '1 month'),
     ('102', '2 months'),
     ('103', '3 months'),
@@ -494,24 +648,24 @@ INSERT INTO months_homeless_past_three_years values
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE name_data_quality (
-    id text primary key,
+CREATE TABLE "name_data_quality" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO name_data_quality values
+INSERT INTO "name_data_quality" values
     ('1', 'Full name reported'),
     ('2', 'Partial, street name, or code name reported'),
     ('8', 'Client doesn’t know'),
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE reason_not_insured_or_assisted (
-    id text primary key,
+CREATE TABLE "reason_not_insured_or_assisted" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO reason_not_insured_or_assisted values
+INSERT INTO "reason_not_insured_or_assisted" values
     ('1', 'Applied; decision pending'),
     ('2', 'Applied; client not eligible'),
     ('3', 'Client did not apply'),
@@ -520,87 +674,87 @@ INSERT INTO reason_not_insured_or_assisted values
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE no_points_yes (
-    id text primary key,
+CREATE TABLE "no_points_yes" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO no_points_yes values
+INSERT INTO "no_points_yes" values
     ('0', 'No (0 points)'),
     ('1', 'Yes'),
     ('99', 'Data not collected');
 
-CREATE TABLE no_yes (
-    id text primary key,
+CREATE TABLE "no_yes" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO no_yes values
+INSERT INTO "no_yes" values
     ('0', 'No'),
     ('1', 'Yes'),
     ('99', 'Data Not Collected');
 
-CREATE TABLE no_yes_refused (
-    id text primary key,
+CREATE TABLE "no_yes_refused" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO no_yes_refused values
+INSERT INTO "no_yes_refused" values
     ('0', 'No'),
     ('1', 'Yes'),
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE no_yes_worker_doesnt_know (
-    id text primary key,
+CREATE TABLE "no_yes_worker_doesnt_know" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO no_yes_worker_doesnt_know values
+INSERT INTO "no_yes_worker_doesnt_know" values
     ('0', 'No'),
     ('1', 'Yes'),
     ('2', 'Worker Doesn’t Know'),
     ('99', 'Data not collected');
 
-CREATE TABLE not_employed_reason (
-    id text primary key,
+CREATE TABLE "not_employed_reason" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO not_employed_reason values
+INSERT INTO "not_employed_reason" values
     ('1', 'Looking for work'),
     ('2', 'Unable to work'),
     ('3', 'Not looking for work'),
     ('99', 'Data not collected');
 
-CREATE TABLE percent_amisimple (
-    id text primary key,
+CREATE TABLE "percent_amisimple" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO percent_amisimple values
+INSERT INTO "percent_amisimple" values
     ('1', 'Less than 30%'),
     ('2', '30% to 50%'),
     ('3', 'Greater than 50%'),
     ('99', 'Data not collected');
 
-CREATE TABLE project_completion_status (
-    id text primary key,
+CREATE TABLE "project_completion_status" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO project_completion_status values
+INSERT INTO "project_completion_status" values
     ('1', 'Completed project'),
     ('2', 'Youth voluntarily left early'),
     ('3', 'Youth was expelled or otherwise involuntarily discharged from project'),
     ('99', 'Data not collected');
 
-CREATE TABLE project_type (
-    id text primary key,
+CREATE TABLE "project_type" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO project_type values
+INSERT INTO "project_type" values
     ('1', 'Emergency Shelter'),
     ('2', 'Transitional Housing'),
     ('3', 'PH - Permanent Supportive Housing (disability required for entry)'),
@@ -615,12 +769,12 @@ INSERT INTO project_type values
     ('13', 'PH - Rapid Re-Housing'),
     ('14', 'Coordinated Assessment');
 
-CREATE TABLE race (
-    id text primary key,
+CREATE TABLE "race" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO race values
+INSERT INTO "race" values
     ('1', 'American Indian or Alaska Native'),
     ('2', 'Asian'),
     ('3', 'Black or African American'),
@@ -630,33 +784,33 @@ INSERT INTO race values
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE reason_not_enrolled (
-    id text primary key,
+CREATE TABLE "reason_not_enrolled" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO reason_not_enrolled values
+INSERT INTO "reason_not_enrolled" values
     ('1', 'Client was found ineligible for PATH'),
     ('2', 'Client was not enrolled for other reason(s)'),
     ('99', 'Data not collected');
 
-CREATE TABLE referral_outcome (
-    id text primary key,
+CREATE TABLE "referral_outcome" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO referral_outcome values
+INSERT INTO "referral_outcome" values
     ('1', 'Attained'),
     ('2', 'Not attained'),
     ('3', 'Unknown'),
     ('99', 'Data not collected');
 
-CREATE TABLE referral_source (
-    id text primary key,
+CREATE TABLE "referral_source" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO referral_source values
+INSERT INTO "referral_source" values
     ('1', 'Self-Referral'),
     ('2', 'Individual: Parent/Guardian/Relative/Friend/Foster Parent/Other Individual'),
     ('7', 'Outreach Project'),
@@ -673,12 +827,12 @@ INSERT INTO referral_source values
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE relationship_to_ho_h (
-    id text primary key,
+CREATE TABLE "relationship_to_ho_h" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO relationship_to_ho_h values
+INSERT INTO "relationship_to_ho_h" values
     ('1', 'Self (head of household)'),
     ('2', 'Head of household’s child'),
     ('3', 'Head of household’s spouse or partner'),
@@ -686,12 +840,12 @@ INSERT INTO relationship_to_ho_h values
     ('5', 'Other: non-relation member'),
     ('99', 'Data not collected');
 
-CREATE TABLE living_situation (
-    id text primary key,
+CREATE TABLE "living_situation" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO living_situation values
+INSERT INTO "living_situation" values
     ('1', 'Emergency shelter, including hotel or motel paid for with emergency shelter voucher'),
     ('2', 'Transitional housing for homeless persons (including homeless youth)'),
     ('3', 'Permanent housing (other than RRH) for formerly homeless persons'),
@@ -719,12 +873,12 @@ INSERT INTO living_situation values
     ('27', 'Interim housing'),
     ('99', 'Data not collected');
 
-CREATE TABLE length_of_stay (
-    id text primary key,
+CREATE TABLE "length_of_stay" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO length_of_stay values
+INSERT INTO "length_of_stay" values
     ('2', 'One week or more, but less than one month'),
     ('3', 'One month or more, but less than 90 days'),
     ('4', '90 days or more but less than one year'),
@@ -735,12 +889,12 @@ INSERT INTO length_of_stay values
     ('11', 'Two to six nights'),
     ('99', 'Data not collected');
 
-CREATE TABLE school_status (
-    id text primary key,
+CREATE TABLE "school_status" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO school_status values
+INSERT INTO "school_status" values
     ('1', 'Attending school regularly'),
     ('2', 'Attending school irregularly'),
     ('3', 'Graduated from high school'),
@@ -752,12 +906,12 @@ INSERT INTO school_status values
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE record_type (
-    id text primary key,
+CREATE TABLE "record_type" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO record_type values
+INSERT INTO "record_type" values
     ('12', 'Contact v5.1'),
     ('13', 'Contact v6.0'),
     ('141', 'PATH service'),
@@ -770,12 +924,12 @@ INSERT INTO record_type values
     ('200', 'Bed night'),
     ('210', 'Bed night');
 
-CREATE TABLE sexual_orientation (
-    id text primary key,
+CREATE TABLE "sexual_orientation" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO sexual_orientation values
+INSERT INTO "sexual_orientation" values
     ('1', 'Heterosexual'),
     ('2', 'Gay'),
     ('3', 'Lesbian'),
@@ -785,35 +939,35 @@ INSERT INTO sexual_orientation values
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE source_type (
-    id text primary key,
+CREATE TABLE "source_type" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO source_type values
+INSERT INTO "source_type" values
     ('1', 'continuum-operated HMIS'),
     ('2', 'agency-specific database'),
     ('3', 'data warehouse'),
     ('4', 'other');
 
-CREATE TABLE ssn_data_quality (
-    id text primary key,
+CREATE TABLE "ssn_data_quality" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO ssn_data_quality values
+INSERT INTO "ssn_data_quality" values
     ('1', 'Full SSN reported'),
     ('2', 'Approximate or partial SSN reported'),
     ('8', 'Client doesn’t know'),
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE subsidy_information (
-    id text primary key,
+CREATE TABLE "subsidy_information" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO subsidy_information values
+INSERT INTO "subsidy_information" values
     ('1', 'Without a subsidy'),
     ('2', 'With the subsidy they had at project entry'),
     ('3', 'With an on-going subsidy acquired since project entry'),
@@ -822,24 +976,24 @@ INSERT INTO subsidy_information values
     ('12', 'Without an on-going subsidy'),
     ('99', 'Data not collected');
 
-CREATE TABLE time_to_housing_loss (
-    id text primary key,
+CREATE TABLE "time_to_housing_loss" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO time_to_housing_loss values
+INSERT INTO "time_to_housing_loss" values
     ('0', '0-6 days'),
     ('1', '7-13 days'),
     ('2', '14-21 days'),
     ('3', 'More than 21 days (0 points)'),
     ('99', 'Data not collected');
 
-CREATE TABLE times_homeless_past_three_years (
-    id text primary key,
+CREATE TABLE "times_homeless_past_three_years" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO times_homeless_past_three_years values
+INSERT INTO "times_homeless_past_three_years" values
     ('1', 'One time'),
     ('2', 'Two times'),
     ('3', 'Three times'),
@@ -848,42 +1002,42 @@ INSERT INTO times_homeless_past_three_years values
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE target_population (
-    id text primary key,
+CREATE TABLE "target_population" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO target_population values
+INSERT INTO "target_population" values
     ('1', 'DV Domestic Violence victims'),
     ('3', 'HIV Persons with HIV/AIDS'),
     ('4', 'NA Not Applicable');
 
-CREATE TABLE t_cell_or_viral_load_source (
-    id text primary key,
+CREATE TABLE "t_cell_or_viral_load_source" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO t_cell_or_viral_load_source values
+INSERT INTO "t_cell_or_viral_load_source" values
     ('1', 'Medical Report '),
     ('2', 'Client Report'),
     ('3', 'Other'),
     ('99', 'Data not collected');
 
-CREATE TABLE tracking_method (
-    id text primary key,
+CREATE TABLE "tracking_method" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO tracking_method values
+INSERT INTO "tracking_method" values
     ('0', 'Entry/Exit Date'),
     ('3', 'Night-by-Night');
 
-CREATE TABLE vamc_station (
-    id text primary key,
+CREATE TABLE "vamc_station" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO vamc_station values
+INSERT INTO "vamc_station" values
     ('402', '(402) Togus, ME'),
     ('405', '(405) White River Junction, VT'),
     ('438', '(438) Sioux Falls, SD'),
@@ -1028,12 +1182,12 @@ INSERT INTO vamc_station values
     ('657A5', '(657A5) Marion, IL'),
     ('99', 'Data not collected');
 
-CREATE TABLE viral_load_available (
-    id text primary key,
+CREATE TABLE "viral_load_available" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO viral_load_available values
+INSERT INTO "viral_load_available" values
     ('0', 'Not available'),
     ('1', 'Available'),
     ('2', 'Undetectable'),
@@ -1041,12 +1195,12 @@ INSERT INTO viral_load_available values
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE when_occurred (
-    id text primary key,
+CREATE TABLE "when_occurred" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO when_occurred values
+INSERT INTO "when_occurred" values
     ('1', 'Within the past three months'),
     ('2', 'Three to six months ago (excluding six months exactly)'),
     ('3', 'Six months to one year ago (excluding one year exactly)'),
@@ -1055,476 +1209,477 @@ INSERT INTO when_occurred values
     ('9', 'Client refused'),
     ('99', 'Data not collected');
 
-CREATE TABLE issues_years (
-    id text primary key,
+CREATE TABLE "issues_years" (
+    id text PRIMARY KEY,
     text text
 );
 
-INSERT INTO issues_years values
+INSERT INTO "issues_years" values
     ('1', 'Less than one year'),
     ('2', '1 to 2 years'),
     ('3', '3 to 5 or more years'),
     ('99', 'Data not collected');
 
-CREATE TABLE affiliation (
-    affiliation_id id,
-    project_id id,
-    res_project_id id
+CREATE TABLE "affiliation" (
+    affiliation_id varchar(32) PRIMARY KEY,
+    project_id varchar(32),
+    res_project_id varchar(32)
 );
 
-CREATE TABLE client (
-    personal_id id,
-    first_name name_hashing_option,
-    middle_name name_hashing_option,
-    last_name name_hashing_option,
+CREATE TABLE "client" (
+    personal_id varchar(32) PRIMARY KEY,
+    first_name hmis_name_hashing_option,
+    middle_name hmis_name_hashing_option,
+    last_name hmis_name_hashing_option,
     name_suffix varchar(50),
-    name_data_quality_id id,
-    ssn ssn_hashing_option,
-    ssndata_quality id references ssn_data_quality(id),
-    dob date,
-    dobdata_quality id references dob_data_quality(id),
-    gender_id id,
-    ethnicity_id id,
-    race_id id,
-    veteran_status id references no_yes_doesnt_know_refused(id)
+    name_data_quality_id integer,
+    ssn hmis_ssn_hashing_option,
+    ssndata_quality text references ssn_data_quality(id),
+    dob xs_date,
+    dobdata_quality text references dob_data_quality(id),
+    gender_id integer,
+    ethnicity_id integer,
+    race_id integer,
+    veteran_status text references no_yes_doesnt_know_refused(id)
 );
 
-CREATE TABLE client_veteran_info (
-    client_veteran_info_id id,
-    personal_id id,
-    year_entered_service g_year,
-    year_separated g_year,
-    world_war_ii no_yes_doesnt_know_refused,
-    korean_war no_yes_doesnt_know_refused,
-    vietnam_war no_yes_doesnt_know_refused,
-    desert_storm no_yes_doesnt_know_refused,
-    afghanistan_oef no_yes_doesnt_know_refused,
-    iraq_oif no_yes_doesnt_know_refused,
-    iraq_ond no_yes_doesnt_know_refused,
-    other_theater no_yes_doesnt_know_refused,
-    military_branch military_branch,
-    discharge_status discharge_status
+CREATE TABLE "client_veteran_info" (
+    client_veteran_info_id varchar(32) PRIMARY KEY,
+    personal_id varchar(32),
+    year_entered_service xs_g_year,
+    year_separated xs_g_year,
+    world_war_ii text references no_yes_doesnt_know_refused(id),
+    korean_war text references no_yes_doesnt_know_refused(id),
+    vietnam_war text references no_yes_doesnt_know_refused(id),
+    desert_storm text references no_yes_doesnt_know_refused(id),
+    afghanistan_oef text references no_yes_doesnt_know_refused(id),
+    iraq_oif text references no_yes_doesnt_know_refused(id),
+    iraq_ond text references no_yes_doesnt_know_refused(id),
+    other_theater text references no_yes_doesnt_know_refused(id),
+    military_branch text references military_branch(id),
+    discharge_status text references discharge_status(id)
 );
 
-CREATE TABLE coc (
-    co_ccode coc_code,
-    project_id id
+CREATE TABLE "coc" (
+    coc_code hmis_coc_code PRIMARY KEY,
+    project_id varchar(32)
 );
 
-CREATE TABLE connection_with_soar (
-    connection_with_soarid id,
-    enrollment_id id,
-    connection_with_soar id references no_yes_doesnt_know_refused(id)
+CREATE TABLE "connection_with_soar" (
+    connection_with_soarid varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    connection_with_soar text references no_yes_doesnt_know_refused(id)
 );
 
-CREATE TABLE date_of_engagement (
-    date_of_engagement_id id,
-    enrollment_id id,
-    date_of_engagement date
+CREATE TABLE "date_of_engagement" (
+    date_of_engagement_id varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    date_of_engagement xs_date
 );
 
-CREATE TABLE date_range_capped (
-    start_date datetime,
-    end_date datetime
+CREATE TABLE "date_range_capped" (
+    id integer PRIMARY KEY,
+    start_date xs_date_time,
+    end_date xs_date_time
 );
 
-CREATE TABLE disabilities (
-    disabilities_id id,
-    enrollment_id id,
-    disability_type_id id,
-    disability_response disability_response_base,
-    indefinite_and_impairs_independence id references no_yes_doesnt_know_refused(id),
-    tcell_count_available id references no_yes_doesnt_know_refused(id),
-    tcell_count t_cell_count,
-    tcell_source id references t_cell_or_viral_load_source(id),
-    viral_load_available_id id,
-    viral_load_id id,
-    viral_load_source id references t_cell_or_viral_load_source(id)
+CREATE TABLE "disabilities" (
+    disabilities_id varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    disability_type_id integer,
+    disability_response hmis_disability_response_base,
+    indefinite_and_impairs_independence text references no_yes_doesnt_know_refused(id),
+    tcell_count_available text references no_yes_doesnt_know_refused(id),
+    tcell_count hmis_t_cell_count,
+    tcell_source text references t_cell_or_viral_load_source(id),
+    viral_load_available_id integer,
+    viral_load_id integer,
+    viral_load_source text references t_cell_or_viral_load_source(id)
 );
 
-CREATE TABLE domestic_violence (
-    domestic_violence_id id,
-    enrollment_id id,
-    domestic_violence_victim id references no_yes_doesnt_know_refused(id),
-    when_occurred_id id,
-    currently_fleeing id references no_yes_doesnt_know_refused(id)
+CREATE TABLE "domestic_violence" (
+    domestic_violence_id varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    domestic_violence_victim text references no_yes_doesnt_know_refused(id),
+    when_occurred_id integer,
+    currently_fleeing text references no_yes_doesnt_know_refused(id)
 );
 
-CREATE TABLE education (
-    education_id id,
-    enrollment_id id,
-    last_grade_completed id references last_grade_completed_simple(id),
-    school_status_id id
+CREATE TABLE "education" (
+    education_id varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    last_grade_completed text references last_grade_completed_simple(id),
+    school_status_id integer
 );
 
-CREATE TABLE employment (
-    employment_id id,
-    enrollment_id id,
-    employed id references no_yes_doesnt_know_refused(id),
-    employment_type_id id,
-    not_employed_reason_id id
+CREATE TABLE "employment" (
+    employment_id varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    employed text references no_yes_doesnt_know_refused(id),
+    employment_type_id integer,
+    not_employed_reason_id integer
 );
 
-CREATE TABLE enrollment (
-    enrollment_id id,
-    personal_id id,
-    project_id id,
-    entry_date date,
-    household_id id,
-    relationship_to_ho_h_id id,
-    living_situation_id id,
-    length_of_stay_id id,
-    losunder_threshold id references no_yes(id),
-    previous_street_essh id references no_yes(id),
-    date_to_street_essh date,
-    times_homeless_past_three_years_id id,
-    months_homeless_past_three_years_id id,
-    disabling_condition id references no_yes_doesnt_know_refused(id)
+CREATE TABLE "enrollment" (
+    enrollment_id varchar(32) PRIMARY KEY,
+    personal_id varchar(32),
+    project_id varchar(32),
+    entry_date xs_date,
+    household_id varchar(32),
+    relationship_to_ho_h_id integer,
+    living_situation_id integer,
+    length_of_stay_id integer,
+    losunder_threshold text references no_yes(id),
+    previous_street_essh text references no_yes(id),
+    date_to_street_essh xs_date,
+    times_homeless_past_three_years_id integer,
+    months_homeless_past_three_years_id integer,
+    disabling_condition text references no_yes_doesnt_know_refused(id)
 );
 
-CREATE TABLE enrollment_co_c (
-    enrollment_co_cid id,
-    enrollment_id id,
-    household_id id,
-    co_ccode coc_code
+CREATE TABLE "enrollment_co_c" (
+    enrollment_co_cid varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    household_id varchar(32),
+    coc_code hmis_coc_code
 );
 
-CREATE TABLE entry_rhsp (
-    entry_rhspid id,
-    enrollment_id id,
-    worst_housing_situation id references no_yes_doesnt_know_refused(id)
+CREATE TABLE "entry_rhsp" (
+    entry_rhspid varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    worst_housing_situation text references no_yes_doesnt_know_refused(id)
 );
 
-CREATE TABLE entry_rhy (
-    entry_rhyid id,
-    enrollment_id id,
-    sexual_orientation_id id,
-    unemployment_fam id references no_yes(id),
-    mental_health_issues_fam id references no_yes(id),
-    physical_disability_fam id references no_yes(id),
-    alcohol_drug_abuse_fam id references no_yes(id),
-    insufficient_income id references no_yes(id),
-    incarcerated_parent id references no_yes(id),
-    former_ward_juvenile_justice id references no_yes_doesnt_know_refused(id),
-    juvenile_justice_years id references issues_years(id),
-    juvenile_justice_months unsigned_int,
-    former_ward_child_welfare id references no_yes_doesnt_know_refused(id),
-    child_welfare_years id references issues_years(id),
-    child_welfare_months unsigned_int,
-    referral_source_id id,
-    count_outreach_referral_approaches unsigned_int
+CREATE TABLE "entry_rhy" (
+    entry_rhyid varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    sexual_orientation_id integer,
+    unemployment_fam text references no_yes(id),
+    mental_health_issues_fam text references no_yes(id),
+    physical_disability_fam text references no_yes(id),
+    alcohol_drug_abuse_fam text references no_yes(id),
+    insufficient_income text references no_yes(id),
+    incarcerated_parent text references no_yes(id),
+    former_ward_juvenile_justice text references no_yes_doesnt_know_refused(id),
+    juvenile_justice_years text references issues_years(id),
+    juvenile_justice_months xs_unsigned_int,
+    former_ward_child_welfare text references no_yes_doesnt_know_refused(id),
+    child_welfare_years text references issues_years(id),
+    child_welfare_months xs_unsigned_int,
+    referral_source_id integer,
+    count_outreach_referral_approaches xs_unsigned_int
 );
 
-CREATE TABLE entry_ssvf (
-    entry_ssvfid id,
-    enrollment_id id,
-    percent_ami id references percent_amisimple(id),
+CREATE TABLE "entry_ssvf" (
+    entry_ssvfid varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    percent_ami text references percent_amisimple(id),
     last_permanent_street varchar(100),
     last_permanent_city varchar(50),
-    last_permanent_state state,
-    last_permanent_zip zip_code,
-    address_data_quality_id id,
-    urgent_referral id references no_points_yes(id),
-    time_to_housing_loss_id id,
-    zero_income id references no_points_yes(id),
-    annual_percent_ami_id id,
-    financial_change id references no_points_yes(id),
-    household_change id references no_points_yes(id),
-    eviction_history_id id,
-    subsidy_at_risk id references no_points_yes(id),
-    literal_homeless_history_id id,
-    disabled_ho_h id references no_points_yes(id),
-    criminal_record id references no_points_yes(id),
-    sex_offender id references no_points_yes(id),
-    dependent_under6 id references no_points_yes(id),
-    single_parent id references no_points_yes(id),
-    hh5plus id references no_points_yes(id),
-    iraq_afghanistan id references no_points_yes(id),
-    fem_vet id references no_points_yes(id),
-    hpscreening_score hp_screening_score,
-    threshold_score positive_integer,
-    vamcstation id references vamc_station(id)
+    last_permanent_state hmis_state references state(id),
+    last_permanent_zip hmis_zip_code,
+    address_data_quality_id integer,
+    urgent_referral text references no_points_yes(id),
+    time_to_housing_loss_id integer,
+    zero_income text references no_points_yes(id),
+    annual_percent_ami_id integer,
+    financial_change text references no_points_yes(id),
+    household_change text references no_points_yes(id),
+    eviction_history_id integer,
+    subsidy_at_risk text references no_points_yes(id),
+    literal_homeless_history_id integer,
+    disabled_ho_h text references no_points_yes(id),
+    criminal_record text references no_points_yes(id),
+    sex_offender text references no_points_yes(id),
+    dependent_under6 text references no_points_yes(id),
+    single_parent text references no_points_yes(id),
+    hh5plus text references no_points_yes(id),
+    iraq_afghanistan text references no_points_yes(id),
+    fem_vet text references no_points_yes(id),
+    hpscreening_score hmis_hp_screening_score,
+    threshold_score integer CHECK (threshold_score > 0),
+    vamcstation text references vamc_station(id)
 );
 
-CREATE TABLE exit (
-    exit_id id,
-    enrollment_id id,
-    exit_date date,
-    destination_id id,
+CREATE TABLE "exit" (
+    exit_id varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    exit_date xs_date,
+    destination_id integer,
     other_destination varchar(50)
 );
 
-CREATE TABLE exit_housing_assessment (
-    exit_housing_assessment_id id,
-    exit_id id,
-    housing_assessment id references housing_assessment_at_exit(id),
-    subsidy_information_id id
+CREATE TABLE "exit_housing_assessment" (
+    exit_housing_assessment_id varchar(32) PRIMARY KEY,
+    exit_id varchar(32),
+    housing_assessment text references housing_assessment_at_exit(id),
+    subsidy_information_id integer
 );
 
-CREATE TABLE exit_rhy (
-    exit_rhyid id,
-    exit_id id,
-    project_completion_status_id id,
-    early_exit_reason_id id,
-    exchange_for_sex id references no_yes_doesnt_know_refused(id),
-    exchange_for_sex_past_three_months id references no_yes_doesnt_know_refused(id),
-    count_of_exchange_for_sex_id id,
-    asked_or_forced_to_exchange_for_sex_id id,
-    asked_or_forced_to_exchange_for_sex_past_three_months id references no_yes_doesnt_know_refused(id),
-    work_place_violence_threats id references no_yes_doesnt_know_refused(id),
-    workplace_promise_difference id references no_yes_doesnt_know_refused(id),
-    coerced_to_continue_work id references no_yes_doesnt_know_refused(id),
-    labor_exploit_past_three_months id references no_yes_doesnt_know_refused(id),
-    counseling_received id references no_yes(id),
-    individual_counseling id references no_yes(id),
-    family_counseling id references no_yes(id),
-    group_counseling id references no_yes(id),
-    session_count_at_exit positive_integer,
-    sessions_in_plan positive_integer,
-    post_exit_counseling_plan id references no_yes(id),
-    destination_safe_client id references no_yes_doesnt_know_refused(id),
-    destination_safe_worker id references no_yes_worker_doesnt_know(id),
-    pos_adult_connections id references no_yes_worker_doesnt_know(id),
-    pos_peer_connections id references no_yes_worker_doesnt_know(id),
-    pos_community_connections id references no_yes_worker_doesnt_know(id)
+CREATE TABLE "exit_rhy" (
+    exit_rhyid varchar(32) PRIMARY KEY,
+    exit_id varchar(32),
+    project_completion_status_id integer,
+    early_exit_reason_id integer,
+    exchange_for_sex text references no_yes_doesnt_know_refused(id),
+    exchange_for_sex_past_three_months text references no_yes_doesnt_know_refused(id),
+    count_of_exchange_for_sex_id integer,
+    asked_or_forced_to_exchange_for_sex_id integer,
+    asked_or_forced_to_exchange_for_sex_past_three_months text references no_yes_doesnt_know_refused(id),
+    work_place_violence_threats text references no_yes_doesnt_know_refused(id),
+    workplace_promise_difference text references no_yes_doesnt_know_refused(id),
+    coerced_to_continue_work text references no_yes_doesnt_know_refused(id),
+    labor_exploit_past_three_months text references no_yes_doesnt_know_refused(id),
+    counseling_received text references no_yes(id),
+    individual_counseling text references no_yes(id),
+    family_counseling text references no_yes(id),
+    group_counseling text references no_yes(id),
+    session_count_at_exit integer CHECK (session_count_at_exit > 0),
+    sessions_in_plan integer CHECK (sessions_in_plan > 0),
+    post_exit_counseling_plan text references no_yes(id),
+    destination_safe_client text references no_yes_doesnt_know_refused(id),
+    destination_safe_worker text references no_yes_worker_doesnt_know(id),
+    pos_adult_connections text references no_yes_worker_doesnt_know(id),
+    pos_peer_connections text references no_yes_worker_doesnt_know(id),
+    pos_community_connections text references no_yes_worker_doesnt_know(id)
 );
 
-CREATE TABLE export (
-    export_id id,
-    export_date datetime,
-    export_period date_range_capped,
-    export_period_type_id id,
-    export_directive_id id
+CREATE TABLE "export" (
+    export_id varchar(32) PRIMARY KEY,
+    export_date xs_date_time,
+    export_period integer references date_range_capped(id),
+    export_period_type_id integer,
+    export_directive_id integer
 );
 
-CREATE TABLE funder (
-    funder_id id,
-    project_id id,
-    funder id references federal_partner_programs_and_components(id),
-    grant_id id,
-    start_date date,
-    end_date date
+CREATE TABLE "funder" (
+    funder_id varchar(32) PRIMARY KEY,
+    project_id varchar(32),
+    funder text references federal_partner_programs_and_components(id),
+    grant_id varchar(32),
+    start_date xs_date,
+    end_date xs_date
 );
 
-CREATE TABLE health_insurance (
-    health_insurance_id id,
-    enrollment_id id,
-    insurance_from_any_source id references no_yes_doesnt_know_refused(id),
-    medicaid id references no_yes(id),
-    no_medicaid_reason reason_not_insured_or_assisted,
-    medicare id references no_yes(id),
-    no_medicare_reason id references reason_not_insured_or_assisted(id),
-    schip id references no_yes(id),
-    no_schipreason id references reason_not_insured_or_assisted(id),
-    vamedical_services id references no_yes(id),
-    no_vamed_reason id references reason_not_insured_or_assisted(id),
-    employer_provided id references no_yes(id),
-    no_employer_provided_reason id references reason_not_insured_or_assisted(id),
-    cobra id references no_yes(id),
-    no_cobrareason id references reason_not_insured_or_assisted(id),
-    private_pay id references no_yes(id),
-    no_private_pay_reason id references reason_not_insured_or_assisted(id),
-    state_health_ins id references no_yes(id),
-    no_state_health_ins_reason id references reason_not_insured_or_assisted(id),
-    indian_health_services id references no_yes(id),
-    no_indian_health_services_reason id references reason_not_insured_or_assisted(id),
-    other_insurance id references no_yes(id),
+CREATE TABLE "health_insurance" (
+    health_insurance_id varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    insurance_from_any_source text references no_yes_doesnt_know_refused(id),
+    medicaid text references no_yes(id),
+    no_medicaid_reason text references reason_not_insured_or_assisted(id),
+    medicare text references no_yes(id),
+    no_medicare_reason text references reason_not_insured_or_assisted(id),
+    schip text references no_yes(id),
+    no_schipreason text references reason_not_insured_or_assisted(id),
+    vamedical_services text references no_yes(id),
+    no_vamed_reason text references reason_not_insured_or_assisted(id),
+    employer_provided text references no_yes(id),
+    no_employer_provided_reason text references reason_not_insured_or_assisted(id),
+    cobra text references no_yes(id),
+    no_cobrareason text references reason_not_insured_or_assisted(id),
+    private_pay text references no_yes(id),
+    no_private_pay_reason text references reason_not_insured_or_assisted(id),
+    state_health_ins text references no_yes(id),
+    no_state_health_ins_reason text references reason_not_insured_or_assisted(id),
+    indian_health_services text references no_yes(id),
+    no_indian_health_services_reason text references reason_not_insured_or_assisted(id),
+    other_insurance text references no_yes(id),
     other_insurance_identify varchar(50)
 );
 
-CREATE TABLE health_status (
-    health_status_id id,
-    enrollment_id id,
-    health_category_id id,
-    health_status id references health_status_type(id),
-    due_date date
+CREATE TABLE "health_status" (
+    health_status_id varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    health_category_id integer,
+    health_status text references health_status_type(id),
+    due_date xs_date
 );
 
-CREATE TABLE housing_assessment_disposition (
-    housing_assessment_disposition_id id,
-    exit_id id,
-    assessment_disposition_id id,
+CREATE TABLE "housing_assessment_disposition" (
+    housing_assessment_disposition_id varchar(32) PRIMARY KEY,
+    exit_id varchar(32),
+    assessment_disposition_id integer,
     other_disposition varchar(50)
 );
 
-CREATE TABLE income_and_sources (
-    income_and_sources_id id,
-    enrollment_id id,
-    income_from_any_source id references no_yes_doesnt_know_refused(id),
-    total_monthly_income money,
-    earned id references no_yes(id),
-    earned_amount money,
-    unemployment id references no_yes(id),
-    unemployment_amount money,
-    ssi id references no_yes(id),
-    ssiamount money,
-    ssdi id references no_yes(id),
-    ssdiamount money,
-    vadisability_service id references no_yes(id),
-    vadisability_service_amount money,
-    vadisability_non_service id references no_yes(id),
-    vadisability_non_service_amount money,
-    private_disability id references no_yes(id),
-    private_disability_amount money,
-    workers_comp id references no_yes(id),
-    workers_comp_amount money,
-    tanf id references no_yes(id),
-    tanfamount money,
-    ga id references no_yes(id),
-    gaamount money,
-    soc_sec_retirement id references no_yes(id),
-    soc_sec_retirement_amount money,
-    pension id references no_yes(id),
-    pension_amount money,
-    child_support id references no_yes(id),
-    child_support_amount money,
-    alimony id references no_yes(id),
-    alimony_amount money,
-    other_source id references no_yes(id),
-    other_source_amount money,
+CREATE TABLE "income_and_sources" (
+    income_and_sources_id varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    income_from_any_source text references no_yes_doesnt_know_refused(id),
+    total_monthly_income hmis_money,
+    earned text references no_yes(id),
+    earned_amount hmis_money,
+    unemployment text references no_yes(id),
+    unemployment_amount hmis_money,
+    ssi text references no_yes(id),
+    ssiamount hmis_money,
+    ssdi text references no_yes(id),
+    ssdiamount hmis_money,
+    vadisability_service text references no_yes(id),
+    vadisability_service_amount hmis_money,
+    vadisability_non_service text references no_yes(id),
+    vadisability_non_service_amount hmis_money,
+    private_disability text references no_yes(id),
+    private_disability_amount hmis_money,
+    workers_comp text references no_yes(id),
+    workers_comp_amount hmis_money,
+    tanf text references no_yes(id),
+    tanfamount hmis_money,
+    ga text references no_yes(id),
+    gaamount hmis_money,
+    soc_sec_retirement text references no_yes(id),
+    soc_sec_retirement_amount hmis_money,
+    pension text references no_yes(id),
+    pension_amount hmis_money,
+    child_support text references no_yes(id),
+    child_support_amount hmis_money,
+    alimony text references no_yes(id),
+    alimony_amount hmis_money,
+    other_source text references no_yes(id),
+    other_source_amount hmis_money,
     other_source_identify varchar(50)
 );
 
-CREATE TABLE inventory (
-    inventory_id id,
-    project_id id,
-    co_ccode coc_code,
-    household_type_id id,
-    availability_id id,
-    unit_inventory integer,
+CREATE TABLE "inventory" (
+    inventory_id varchar(32) PRIMARY KEY,
+    project_id varchar(32),
+    coc_code hmis_coc_code,
+    household_type_id integer,
+    availability_id integer,
+    unit_inventory xs_integer,
     bed_inventory integer CHECK (bed_inventory >= 0),
     chbed_inventory integer CHECK (chbed_inventory >= 0),
     vet_bed_inventory integer CHECK (vet_bed_inventory >= 0),
     youth_bed_inventory integer CHECK (youth_bed_inventory >= 0),
-    bed_type_id id,
-    inventory_start_date date,
-    inventory_end_date date,
+    bed_type_id integer,
+    inventory_start_date xs_date,
+    inventory_end_date xs_date,
     hmisparticipating_beds integer CHECK (hmisparticipating_beds >= 0)
 );
 
-CREATE TABLE medical_assistance (
-    medical_assistance_id id,
-    enrollment_id id,
-    hivaidsassistance id references no_yes_doesnt_know_refused(id),
-    no_hivaidsassistance_reason id references reason_not_insured_or_assisted(id),
-    adap id references no_yes_doesnt_know_refused(id),
-    no_adapreason id references reason_not_insured_or_assisted(id)
+CREATE TABLE "medical_assistance" (
+    medical_assistance_id varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    hivaidsassistance text references no_yes_doesnt_know_refused(id),
+    no_hivaidsassistance_reason text references reason_not_insured_or_assisted(id),
+    adap text references no_yes_doesnt_know_refused(id),
+    no_adapreason text references reason_not_insured_or_assisted(id)
 );
 
-CREATE TABLE non_cash_benefits (
-    non_cash_benefits_id id,
-    enrollment_id id,
-    benefits_from_any_source id references no_yes_doesnt_know_refused(id),
-    snap id references no_yes(id),
-    wic id references no_yes(id),
-    tanfchild_care id references no_yes(id),
-    tanftransportation id references no_yes(id),
-    other_tanf id references no_yes(id),
-    other_benefits_source id references no_yes(id),
+CREATE TABLE "non_cash_benefits" (
+    non_cash_benefits_id varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    benefits_from_any_source text references no_yes_doesnt_know_refused(id),
+    snap text references no_yes(id),
+    wic text references no_yes(id),
+    tanfchild_care text references no_yes(id),
+    tanftransportation text references no_yes(id),
+    other_tanf text references no_yes(id),
+    other_benefits_source text references no_yes(id),
     other_benefits_source_identify varchar(50)
 );
 
-CREATE TABLE organization (
-    organization_id id,
+CREATE TABLE "organization" (
+    organization_id varchar(32) PRIMARY KEY,
     organization_name varchar(50),
     organization_common_name varchar(50)
 );
 
-CREATE TABLE path_status (
-    path_status_id id,
-    enrollment_id id,
-    date_of_status date,
-    client_enrolled_in_path id references no_yes(id),
-    reason_not_enrolled_id id
+CREATE TABLE "path_status" (
+    path_status_id varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    date_of_status xs_date,
+    client_enrolled_in_path text references no_yes(id),
+    reason_not_enrolled_id integer
 );
 
-CREATE TABLE project (
-    project_id id,
-    organization_id id,
+CREATE TABLE "project" (
+    project_id varchar(32) PRIMARY KEY,
+    organization_id varchar(32),
     project_name varchar(50),
-    continuum_project id references no_yes(id),
-    project_type_id id,
-    operating_start_date date,
-    operating_end_date date,
-    residential_affiliation id references no_yes(id),
-    tracking_method_id id,
-    target_population_id id,
-    victim_services_provider id references no_yes(id),
-    housing_type_id id,
+    continuum_project text references no_yes(id),
+    project_type_id integer,
+    operating_start_date xs_date,
+    operating_end_date xs_date,
+    residential_affiliation text references no_yes(id),
+    tracking_method_id integer,
+    target_population_id integer,
+    victim_services_provider text references no_yes(id),
+    housing_type_id integer,
     project_common_name varchar(50)
 );
 
-CREATE TABLE move_in_date (
-    move_in_date_id id,
-    enrollment_id id,
-    move_in_date date
+CREATE TABLE "move_in_date" (
+    move_in_date_id varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    move_in_date xs_date
 );
 
-CREATE TABLE rhy_aftercare (
-    rhy_after_care_id id,
-    exit_id id,
-    after_care_date date,
-    after_care_provided id references no_yes_refused(id),
-    email_social_media id references no_yes(id),
-    telephone id references no_yes(id),
-    in_person_individual id references no_yes(id),
-    in_person_group id references no_yes(id)
+CREATE TABLE "rhy_aftercare" (
+    rhy_after_care_id varchar(32) PRIMARY KEY,
+    exit_id varchar(32),
+    after_care_date xs_date,
+    after_care_provided text references no_yes_refused(id),
+    email_social_media text references no_yes(id),
+    telephone text references no_yes(id),
+    in_person_individual text references no_yes(id),
+    in_person_group text references no_yes(id)
 );
 
-CREATE TABLE rhy_bcpstatus (
-    rhybcpstatus_id id,
-    enrollment_id id,
-    date_of_bcpstatus date,
-    eligible_for_rhy id references no_yes(id),
-    reason_no_services id references rhy_reason_no_services(id),
-    runaway_youth id references no_yes_doesnt_know_refused(id)
+CREATE TABLE "rhy_bcpstatus" (
+    rhybcpstatus_id varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    date_of_bcpstatus xs_date,
+    eligible_for_rhy text references no_yes(id),
+    reason_no_services text references rhy_reason_no_services(id),
+    runaway_youth text references no_yes_doesnt_know_refused(id)
 );
 
-CREATE TABLE service_fareferral (
-    service_fareferral_id id,
-    enrollment_id id,
-    date_provided date,
-    record_type_id id,
-    type_provided ?,
+CREATE TABLE "service_fareferral" (
+    service_fareferral_id varchar(32) PRIMARY KEY,
+    enrollment_id varchar(32),
+    date_provided xs_date,
+    record_type_id integer,
+    type_provided integer,
     other_type_provided varchar(50),
-    sub_type_provided ?,
-    faamount money,
-    referral_outcome_id id
+    sub_type_provided integer,
+    faamount hmis_money,
+    referral_outcome_id integer
 );
 
-CREATE TABLE geography (
-    geography_id id,
-    project_id id,
-    co_ccode coc_code,
-    geocode_id id,
-    geography_type_id id,
+CREATE TABLE "geography" (
+    geography_id varchar(32) PRIMARY KEY,
+    project_id varchar(32),
+    coc_code hmis_coc_code,
+    geocode_id integer,
+    geography_type_id integer,
     address1 varchar(100),
     address2 varchar(100),
     city varchar(50),
-    state_id id,
-    zip zip_code
+    state_id integer,
+    zip hmis_zip_code
 );
 
-CREATE TABLE source (
-    source_id id,
-    source_type_id id,
+CREATE TABLE "source" (
+    source_id varchar(32) PRIMARY KEY,
+    source_type_id integer,
     source_name varchar(50),
     software_name varchar(50),
-    software_version text,
-    source_contact_email email,
-    source_contact_extension extension,
+    software_version xs_string,
+    source_contact_email hmis_email,
+    source_contact_extension hmis_extension,
     source_contact_first varchar(50),
     source_contact_last varchar(50),
-    source_contact_phone phone_number,
-    export_id id
+    source_contact_phone hmis_phone_number,
+    export_id integer
 );
 
-CREATE TABLE sources (
-    source_id id
+CREATE TABLE "sources" (
+    source_id integer PRIMARY KEY
 );
 
-CREATE TABLE vash_exit_reason (
-    vash_exit_reason_id id,
-    exit_id id,
-    cmexit_reason id references cm_exit_reason(id)
+CREATE TABLE "vash_exit_reason" (
+    vash_exit_reason_id varchar(32) PRIMARY KEY,
+    exit_id varchar(32),
+    cmexit_reason text references cm_exit_reason(id)
 );
